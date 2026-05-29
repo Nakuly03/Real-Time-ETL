@@ -1,10 +1,12 @@
 # Real-Time ETL Pipeline using Kafka and MySQL
 
-## Project Overview
+## Overview
 
 This project demonstrates a real-time ETL (Extract, Transform, Load) pipeline built using Apache Kafka, Python, Docker, and MySQL.
 
-The pipeline continuously generates sales events, streams them through Kafka, validates and transforms the data, and loads the processed records into a MySQL database for analytical reporting.
+The pipeline continuously generates sales transactions, streams them through Kafka, validates and transforms incoming events, and loads the processed data into MySQL for analytical reporting.
+
+---
 
 ## Architecture
 
@@ -22,6 +24,8 @@ Data Transformation
 MySQL Database
 ```
 
+---
+
 ## Tech Stack
 
 - Python
@@ -31,17 +35,22 @@ MySQL Database
 - SQL
 - kafka-python
 - mysql-connector-python
+- python-dotenv
+
+---
 
 ## Features
 
-- Real-time data ingestion using Kafka
-- Continuous event processing
+- Real-time event streaming using Kafka
 - Data validation checks
 - Data transformation logic
 - Automated loading into MySQL
-- Error handling and logging
-- Analytical SQL reporting
-- Containerized Kafka infrastructure using Docker
+- Logging and error handling
+- Environment variable management using .env
+- SQL analytics reporting
+- Dockerized Kafka infrastructure
+
+---
 
 ## Project Structure
 
@@ -61,12 +70,14 @@ real_time_etl/
 ├── sql/
 │   └── analytics.sql
 │
+├── .env
+├── .gitignore
 ├── docker-compose.yml
-│
 ├── requirements.txt
-│
 └── README.md
 ```
+
+---
 
 ## Data Flow
 
@@ -74,14 +85,14 @@ real_time_etl/
 
 Sales events are generated in real time using the Kafka producer.
 
-Example event:
+Example:
 
 ```json
 {
-    "order_id": 1001,
-    "product": "Laptop",
-    "quantity": 2,
-    "price": 65000
+  "order_id": 1001,
+  "product": "Laptop",
+  "quantity": 2,
+  "price": 65000
 }
 ```
 
@@ -92,7 +103,7 @@ The consumer performs:
 - Quantity validation
 - Price validation
 - Total amount calculation
-- Timestamp generation
+- Event timestamp generation
 
 Example:
 
@@ -102,9 +113,11 @@ total_amount = quantity × price
 
 ### Load
 
-Validated records are loaded into MySQL.
+Validated records are inserted into MySQL.
 
-## MySQL Schema
+---
+
+## Database Schema
 
 ```sql
 CREATE TABLE sales_stream (
@@ -123,19 +136,33 @@ CREATE TABLE sales_stream (
 );
 ```
 
+---
+
 ## Setup Instructions
 
 ### Clone Repository
 
 ```bash
-git clone <repository-url>
-cd real_time_etl
+git clone https://github.com/your-username/Real-Time-ETL-Pipeline.git
+
+cd Real-Time-ETL-Pipeline
 ```
 
 ### Install Dependencies
 
 ```bash
 pip install -r requirements.txt
+```
+
+### Configure Environment Variables
+
+Create a `.env` file:
+
+```env
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=realtime_etl
 ```
 
 ### Start Kafka
@@ -156,21 +183,21 @@ python producer/producer.py
 python consumer/consumer.py
 ```
 
+---
+
 ## Analytics Queries
 
 ### Total Revenue
 
 ```sql
-SELECT
-    SUM(total_amount)
+SELECT SUM(total_amount) AS total_revenue
 FROM sales_stream;
 ```
 
 ### Total Orders
 
 ```sql
-SELECT
-    COUNT(*)
+SELECT COUNT(*) AS total_orders
 FROM sales_stream;
 ```
 
@@ -196,16 +223,20 @@ GROUP BY product
 ORDER BY units_sold DESC;
 ```
 
-## Sample Output
+---
+
+## Sample Consumer Output
 
 ```text
 Loaded -> {
-    'order_id': 4321,
+    'order_id': 4521,
     'product': 'Laptop',
     'quantity': 2,
     'price': 65000
 }
 ```
+
+---
 
 ## Learning Outcomes
 
@@ -213,19 +244,20 @@ Loaded -> {
 - ETL pipeline development
 - Data validation and transformation
 - MySQL integration
-- Docker-based deployment
-- SQL analytics and reporting
+- Docker containerization
+- SQL analytics
 - Logging and error handling
+- Secure credential management using environment variables
+
+---
 
 ## Future Enhancements
 
-- Apache Airflow scheduling
-- AWS S3 integration
-- Snowflake integration
-- Real-time monitoring dashboard
-- Data quality framework
-- CI/CD pipeline implementation
+- Apache Airflow Scheduling
+- AWS S3 Integration
+- Snowflake Data Warehouse Integration
+- Real-Time Monitoring Dashboard
+- Data Quality Framework
+- CI/CD Pipeline
 
-## Author
-
-Nakul Yadav
+---
